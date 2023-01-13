@@ -44,13 +44,10 @@ export default defineStore("user", {
       this.userLoggedIn = false;
     },
 
-    async checkUser(): Promise<string> {
-      return (await auth.currentUser) as any;
-    },
-
-    async getProfile(): Promise<object> {
-      const user = auth.currentUser;
-      return {};
+    checkUser(): void {
+      if (auth.currentUser) {
+        this.userLoggedIn = true;
+      }
     },
   },
 });

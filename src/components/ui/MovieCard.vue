@@ -52,7 +52,7 @@ import useUserStore from "@/stores/user";
 import useMovieStore from "@/stores/movie";
 
 const props = defineProps<{
-  movies: object[];
+  movies: any;
 }>();
 
 const useUser = useUserStore();

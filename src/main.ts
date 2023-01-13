@@ -3,14 +3,19 @@ import { createPinia } from "pinia";
 
 import App from "./App.vue";
 import router from "./router";
+import { auth } from "./includes/firebase";
 
 import "./assets/main.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
 
-const app = createApp(App);
+let app: any;
 
-app.use(createPinia());
-app.use(router);
-
-app.mount("#app");
+auth.onAuthStateChanged(() => {
+  if (!app) {
+    app = createApp(App);
+    app.use(createPinia());
+    app.use(router);
+    app.mount("#app");
+  }
+});

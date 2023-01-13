@@ -42,7 +42,21 @@
           </li>
         </ul>
 
-        <SearchForm v-if="authenticated" />
+        <template v-if="authenticated">
+          <SearchForm class="me-2" />
+
+          <ul class="navbar-nav">
+            <li class="nav-item me-2">
+              <button
+                type="button"
+                class="btn btn-outline-warning"
+                @click.prevent="useUser.signOut()"
+              >
+                Sign out
+              </button>
+            </li>
+          </ul>
+        </template>
 
         <ul v-else class="navbar-nav">
           <li class="nav-item me-2">

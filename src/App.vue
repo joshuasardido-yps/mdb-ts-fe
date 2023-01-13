@@ -10,13 +10,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onBeforeMount } from "vue";
 import { RouterView } from "vue-router";
 import useUserStore from "./stores/user";
 import AppNav from "./components/layouts/AppNav.vue";
 import AppFooter from "./components/layouts/AppFooter.vue";
 
 const useUser = useUserStore();
+
+onBeforeMount(() => {
+  useUser.checkUser();
+});
 
 const isRegistered = ref<boolean>(false);
 </script>
