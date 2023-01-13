@@ -107,8 +107,4 @@ const modalToggle = (toggle: boolean): void => {
 };
 </script>
 
-<style scoped lang="scss">
-.router-link-active {
-  color: #fff;
-}
-</style>
+<style scoped lang="scss"></style>

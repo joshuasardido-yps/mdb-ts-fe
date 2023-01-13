@@ -1,5 +1,5 @@
 <template>
-  <footer class="text-center text-lg-start bg-light text-muted">
+  <footer class="app-footer text-center text-lg-start bg-light text-muted">
     <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05)">
       TypeScript Practice: to unlock the other feature you're required to
       <button
@@ -31,3 +31,5 @@ const emit = defineEmits<{
   (e: "isRegistered", data: boolean): void;
 }>();
 </script>
+
+<style scoped lang="scss"></style>
