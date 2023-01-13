@@ -24,14 +24,6 @@ db.enablePersistence().catch((error) => {
 });
 
 const usersCollection = db.collection("users");
-const songsCollection = db.collection("songs");
-const commentsCollection = db.collection("comments");
+const savedMoviesCollection = db.collection("saved-movies");
 
-export {
-  auth,
-  db,
-  usersCollection,
-  songsCollection,
-  commentsCollection,
-  storage,
-};
+export { auth, db, usersCollection, savedMoviesCollection, storage };

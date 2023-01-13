@@ -26,34 +26,36 @@
         Visit
       </router-link>
 
-      <button
-        v-if="!useMovie.checkMovie(movie.id).length"
-        class="btn btn-primary"
-        @click.prevent="savedMovie(movie)"
-      >
-        Save
-      </button>
-      <button
-        v-else
-        class="btn bg-danger"
-        @click.prevent="unsavedMovie(movie.id)"
-      >
-        Unsave
-      </button>
+      <template v-if="useUser.userLoggedIn">
+        <button
+          v-if="!useMovie.checkMovie(movie.id).length"
+          class="btn btn-primary"
+          @click.prevent="savedMovie(movie)"
+        >
+          Save
+        </button>
+        <button
+          v-else
+          class="btn bg-danger"
+          @click.prevent="unsavedMovie(movie.id)"
+        >
+          Unsave
+        </button>
+      </template>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { useMovieStore } from "@/stores/movie";
+import useUserStore from "@/stores/user";
+import useMovieStore from "@/stores/movie";
 
-const props = defineProps({
-  movies: {
-    type: Object,
-    required: true,
-  },
-});
+const props = defineProps<{
+  movies: object[];
+}>();
+
+const useUser = useUserStore();
 
 const useMovie = useMovieStore();
 

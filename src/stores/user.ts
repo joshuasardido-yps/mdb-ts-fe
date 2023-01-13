@@ -50,7 +50,6 @@ export default defineStore("user", {
 
     async getProfile(): Promise<object> {
       const user = auth.currentUser;
-      console.log("xxxx", user);
       return {};
     },
   },

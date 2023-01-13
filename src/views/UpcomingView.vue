@@ -8,10 +8,10 @@
 </template>
 
 <script setup lang="ts">
-import MovieCard from "@/components/MovieCard.vue";
+import MovieCard from "@/components/ui/MovieCard.vue";
 
 import { onMounted, computed } from "vue";
-import { useMovieStore } from "@/stores/movie";
+import useMovieStore from "@/stores/movie";
 
 const useMovie = useMovieStore();
 

@@ -21,7 +21,7 @@ const options = (path: string, page?: number, limit?: number): TOptions => {
   };
 };
 
-export const useMovieStore = defineStore("movie", {
+export default defineStore("movie", {
   state: () => {
     return {
       search: {

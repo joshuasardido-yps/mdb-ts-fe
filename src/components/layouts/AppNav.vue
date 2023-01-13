@@ -8,6 +8,7 @@
       >
         Movie Database
       </a>
+
       <button
         class="navbar-toggler"
         type="button"
@@ -19,6 +20,7 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
+
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav me-auto mb-2 mb-md-0">
           <li class="nav-item">
@@ -26,56 +28,82 @@
               Upcoming
             </router-link>
           </li>
-          <li class="nav-item">
+
+          <!-- <li class="nav-item">
             <router-link class="nav-link" :to="{ name: 'actors' }">
               Actors
             </router-link>
-          </li>
-          <li class="nav-item">
+          </li> -->
+
+          <li v-if="authenticated" class="nav-item">
             <router-link class="nav-link" :to="{ name: 'saved-movies' }">
               Saved movies
             </router-link>
           </li>
         </ul>
-        <form class="d-flex">
-          <input
-            class="form-control me-2"
-            type="search"
-            v-model="search"
-            placeholder="Search movies"
-            aria-label="Search"
-          />
-          <button
-            class="btn btn-outline-success"
-            type="submit"
-            @click.prevent="requestSearch()"
-          >
-            Search
-          </button>
-        </form>
+
+        <SearchForm v-if="authenticated" />
+
+        <ul v-else class="navbar-nav">
+          <li class="nav-item me-2">
+            <button
+              type="button"
+              class="btn btn-outline-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#authModal"
+              @click.prevent="modalToggle(true)"
+            >
+              Sign up
+            </button>
+          </li>
+
+          <li class="nav-item">
+            <button
+              type="button"
+              class="btn btn-outline-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#authModal"
+              @click.prevent="modalToggle(false)"
+            >
+              Login
+            </button>
+          </li>
+        </ul>
       </div>
     </div>
   </nav>
+  <auth-modal :is-register="state.isRegister" />
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { RouterLink, useRoute, useRouter } from "vue-router";
+import { reactive, computed, watch } from "vue";
+import { RouterLink } from "vue-router";
+import useUserStore from "@/stores/user";
 
-const search = ref<string>("");
+import SearchForm from "@/components/forms/SearchForm.vue";
+import AuthModal from "@/components/modals/AuthModal.vue";
 
-const route = useRoute();
+const props = defineProps<{
+  isRegistered: boolean;
+}>();
 
-const router = useRouter();
-
-onMounted(() => {
-  if (route.name === "movies") {
-    search.value = route.params.title as string;
+watch(
+  () => props.isRegistered,
+  (val) => {
+    modalToggle(val);
   }
+);
+
+const useUser = useUserStore();
+
+const authenticated = computed(() => useUser.userLoggedIn);
+
+const state = reactive({
+  isRegister: false,
 });
 
-const requestSearch = (): void => {
-  router.push({ name: "movies", params: { title: search.value } });
+const modalToggle = (toggle: boolean): void => {
+  state.isRegister = toggle;
 };
 </script>
 

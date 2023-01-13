@@ -8,11 +8,11 @@
 </template>
 
 <script setup lang="ts">
-import MovieCard from "@/components/MovieCard.vue";
+import MovieCard from "@/components/ui/MovieCard.vue";
 
 import { watchEffect, computed } from "vue";
 import { useRoute } from "vue-router";
-import { useMovieStore } from "@/stores/movie";
+import useMovieStore from "@/stores/movie";
 
 const useMovie = useMovieStore();
 
