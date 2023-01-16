@@ -99,6 +99,7 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import useUserStore from "@/stores/user";
+import useMovieStore from "@/stores/movie";
 
 defineProps<{
   isRegister: boolean;
@@ -116,6 +117,8 @@ const state = reactive({
 
 const useUser = useUserStore();
 
+const useMovie = useMovieStore();
+
 const register = () => {
   useUser.register({
     email: state.email,
@@ -126,7 +129,8 @@ const register = () => {
   });
 };
 
-const authenticate = () => {
-  useUser.authenticate({ email: state.email, password: state.password });
+const authenticate = async () => {
+  await useUser.authenticate({ email: state.email, password: state.password });
+  await useMovie.requestGetSavedMovies();
 };
 </script>

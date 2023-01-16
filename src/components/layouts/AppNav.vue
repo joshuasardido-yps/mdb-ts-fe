@@ -50,7 +50,7 @@
               <button
                 type="button"
                 class="btn btn-outline-warning"
-                @click.prevent="useUser.signOut()"
+                @click.prevent="signOut()"
               >
                 Sign out
               </button>
@@ -91,8 +91,9 @@
 
 <script setup lang="ts">
 import { reactive, computed, watch } from "vue";
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 import useUserStore from "@/stores/user";
+import useMovieStore from "@/stores/movie";
 
 import SearchForm from "@/components/forms/SearchForm.vue";
 import AuthModal from "@/components/modals/AuthModal.vue";
@@ -108,7 +109,11 @@ watch(
   }
 );
 
+const router = useRouter();
+
 const useUser = useUserStore();
+
+const useMovie = useMovieStore();
 
 const authenticated = computed(() => useUser.userLoggedIn);
 
@@ -118,6 +123,12 @@ const state = reactive({
 
 const modalToggle = (toggle: boolean): void => {
   state.isRegister = toggle;
+};
+
+const signOut = () => {
+  useUser.signOut();
+  router.push({ name: "upcoming" });
+  useMovie.requestUpcoming();
 };
 </script>
 

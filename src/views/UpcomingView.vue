@@ -11,12 +11,19 @@
 import MovieCard from "@/components/ui/MovieCard.vue";
 
 import { onMounted, computed } from "vue";
+import useUserStore from "@/stores/user";
 import useMovieStore from "@/stores/movie";
+
+const useUser = useUserStore();
 
 const useMovie = useMovieStore();
 
 onMounted(() => {
   useMovie.requestUpcoming();
+
+  if (useUser.getUid) {
+    useMovie.requestGetSavedMovies();
+  }
 });
 
 const movies = computed(() => useMovie.movies.results);

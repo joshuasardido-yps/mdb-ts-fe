@@ -21,6 +21,9 @@ const routes = [
     path: "/movies/:title",
     name: "movies",
     component: MoviesView,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/actors",

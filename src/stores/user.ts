@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import useMovieStore from "@/stores/movie";
 import { auth, usersCollection } from "@/includes/firebase";
 import type IUser from "@/interfaces/IUser";
 import type { TUserCred } from "@/types/TUserCred";
@@ -6,6 +7,7 @@ import type { TUserCred } from "@/types/TUserCred";
 export default defineStore("user", {
   state: () => ({
     userLoggedIn: false as boolean,
+    uid: "" as string,
   }),
 
   actions: {
@@ -26,7 +28,7 @@ export default defineStore("user", {
         displayName: user.name as string,
       });
 
-      this.userLoggedIn = true;
+      this.checkUser();
     },
 
     async authenticate(user: IUser): Promise<void> {
@@ -35,19 +37,25 @@ export default defineStore("user", {
         user.password as string
       );
 
-      this.userLoggedIn = true;
+      this.checkUser();
     },
 
     async signOut(): Promise<void> {
       await auth.signOut();
 
-      this.userLoggedIn = false;
+      this.$reset();
+      useMovieStore().$reset();
     },
 
     checkUser(): void {
       if (auth.currentUser) {
         this.userLoggedIn = true;
+        this.uid = auth.currentUser.uid;
       }
     },
+  },
+
+  getters: {
+    getUid: (state): string => state.uid,
   },
 });

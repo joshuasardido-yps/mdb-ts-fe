@@ -84,11 +84,11 @@ const renderImage = (imageUrl: string): string => {
 };
 
 const savedMovie = (data: object) => {
-  useMovie.saveMovie(data as any);
+  useMovie.requestSaveMovie(data as any);
 };
 
 const unsavedMovie = (id: string) => {
-  useMovie.unsaveMovie(id);
+  useMovie.requestUnsaveMovie(id);
 };
 </script>
 

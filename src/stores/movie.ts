@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
+import useUserStore from "@/stores/user";
 import axios from "redaxios";
+import { auth, savedMoviesCollection } from "@/includes/firebase";
 import type { TOptions } from "@/types/TMovies";
 
 const apiKey = import.meta.env.VITE_X_RapidAPI_Key;
@@ -33,6 +35,7 @@ export default defineStore("movie", {
         next: "" as string,
         results: [],
       },
+      movie: {},
       savedMovies: [],
       errors: {},
     };
@@ -81,21 +84,12 @@ export default defineStore("movie", {
       }
     },
 
-    async requestMovie(id: number): Promise<void> {
+    requestMovie(id: string): object {
       this.loading = true;
-      this.clearMovies();
 
-      try {
-        const response = await axios.request(options(`/titles/${id}`) as any);
-
-        this.movies.results = [
-          ...response.data.results,
-          response.data.results,
-        ] as any;
-        this.loading = false;
-      } catch (error) {
-        this.errors;
-      }
+      return this.movies.results.filter(
+        (movie: { id: string }) => movie.id === id
+      );
     },
 
     async requestActorMovies(id: number): Promise<void> {
@@ -115,29 +109,57 @@ export default defineStore("movie", {
 
     checkMovie(id: string): any {
       return this.savedMovies.filter(
-        (movie: { id: string }) => movie.id === id
+        (movie: { id: string; uid: string }) =>
+          movie.id === id && movie.uid === useUserStore().getUid
       );
     },
 
-    saveMovie(data: { id: string }): void {
+    async requestGetSavedMovies() {
+      const savedMovies = await savedMoviesCollection
+        .where("uid", "==", useUserStore().getUid)
+        .get();
+
+      this.savedMovies = [];
+
+      savedMovies.forEach((data) => {
+        this.savedMovies = [...this.savedMovies, data.data()] as any;
+      });
+    },
+
+    async requestSaveMovie(data: { id: string; uid: string }): Promise<void> {
       const isExist = this.checkMovie(data.id).filter(
-        (movie: { id: string }) => movie.id === data.id
+        (movie: { id: string; uid: string }) =>
+          movie.id === data.id && movie.uid === data.uid
       );
 
       if (isExist.length === 0) {
+        data.uid = useUserStore().getUid;
+
         this.savedMovies = [...this.savedMovies, data] as any;
+
+        await savedMoviesCollection.doc().set(data);
       }
     },
 
-    unsaveMovie(id: string): void {
-      const newSavedMovies: { id: string }[] = this.savedMovies;
+    async requestUnsaveMovie(id: string): Promise<void> {
+      const newSavedMovies: { id: string; uid: string }[] = this.savedMovies;
 
       const indexOfObject = newSavedMovies.findIndex((movie) => {
-        return movie.id === id;
+        return movie.id === id && movie.uid === useUserStore().getUid;
       });
 
       if (indexOfObject !== -1) {
         newSavedMovies.splice(indexOfObject, 1);
+
+        await savedMoviesCollection
+          .where("id", "==", id)
+          .where("uid", "==", useUserStore().getUid)
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach(function (doc) {
+              doc.ref.delete();
+            });
+          });
       }
     },
 

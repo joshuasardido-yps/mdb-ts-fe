@@ -8,14 +8,19 @@
 </template>
 
 <script setup lang="ts">
-import MovieCard from "@/components/ui/MovieCard.vue";
+import { onMounted, computed } from "vue";
 
-import { computed } from "vue";
 import useMovieStore from "@/stores/movie";
+
+import MovieCard from "@/components/ui/MovieCard.vue";
 
 const useMovie = useMovieStore();
 
 const movies = computed(() => useMovie.savedMovies);
+
+onMounted(() => {
+  useMovie.requestGetSavedMovies();
+});
 </script>
 
 <style scoped lang="scss">
