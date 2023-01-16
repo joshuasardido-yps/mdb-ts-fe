@@ -3,6 +3,8 @@
     <div
       class="modal fade"
       id="authModal"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
       tabindex="-1"
       aria-labelledby="exampleModalLabel"
       aria-hidden="true"
@@ -14,6 +16,7 @@
             <button
               type="button"
               class="btn-close"
+              ref="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
             />

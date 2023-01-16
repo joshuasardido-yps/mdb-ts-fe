@@ -17,18 +17,20 @@ export default defineStore("user", {
         user.password as string
       )) as TUserCred;
 
+      this.checkUser();
+
+      this.addUser(userCred as TUserCred, user as IUser);
+    },
+
+    async addUser(userCred: TUserCred, user: IUser): Promise<void> {
       await usersCollection.doc(userCred.user.uid).set({
         name: user.name as string,
         email: user.email as string,
-        age: user.age as number,
-        country: user.country as string,
       });
 
       await userCred.user.updateProfile({
         displayName: user.name as string,
       });
-
-      this.checkUser();
     },
 
     async authenticate(user: IUser): Promise<void> {

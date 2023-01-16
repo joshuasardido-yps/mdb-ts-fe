@@ -19,11 +19,10 @@ const useUser = useUserStore();
 const useMovie = useMovieStore();
 
 onMounted(() => {
-  useMovie.requestUpcoming();
-
   if (useUser.getUid) {
     useMovie.requestGetSavedMovies();
   }
+  useMovie.requestUpcoming();
 });
 
 const movies = computed(() => useMovie.movies.results);
